@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Our Love Story | Tuli &amp; Kanu 💍</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Cinematic Backdrop Layer -->
+  <div class="bg-fixed-backdrop"></div>
+  <div class="bg-vignette-overlay"></div>
+
+  <!-- Ambient & Confetti Canvases -->
+  <canvas id="ambientCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ===================================================================
+       LUXURY NAVIGATION BAR
+       =================================================================== -->
+  <header class="luxury-navbar">
+    <nav class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-monogram">T&amp;K</div>
+        <div class="nav-brand-text">
+          <span class="nav-brand-title">Tuli &amp; Kanu</span>
+          <span class="nav-brand-sub">Our Universe 💍</span>
+        </div>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link"><span>🔒</span> The Vault</a></li>
+        <li><a href="story.html" class="nav-link active"><span>📖</span> Our Journey</a></li>
+        <li><a href="gallery.html" class="nav-link"><span>📸</span> Memory Gallery</a></li>
+        <li><a href="letter.html" class="nav-link"><span>💌</span> Love Note &amp; Cake</a></li>
+      </ul>
+
+      <div class="nav-audio-widget" id="navAudioWidget" title="Play / Pause romantic background melody">
+        <div class="nav-vinyl" id="navVinyl">
+          <div class="nav-vinyl-dot"></div>
+        </div>
+        <div class="nav-audio-info">
+          <span class="nav-audio-title">Kanu's Melody</span>
+          <div class="nav-audio-wave">
+            <div class="nav-wave-bar"></div>
+            <div class="nav-wave-bar"></div>
+            <div class="nav-wave-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu">&#9776;</button>
+    </nav>
+  </header>
+
+  <!-- ===================================================================
+       TIMELINE CONTENT
+       =================================================================== -->
+  <main class="page-container">
+
+    <!-- Page Header -->
+    <section class="page-hero">
+      <div class="page-fiancee-badge">
+        <span>📖</span>
+        <span>Chapter I &bull; Our Love Journey</span>
+        <span>💍</span>
+      </div>
+      <h1 class="page-title">
+        The Story of <span class="highlight-tuli">Us</span>
+      </h1>
+      <div class="page-subtitle">
+        Every milestone, every quiet glance, and the moment we chose forever 💕
+      </div>
+      <p class="page-desc">
+        From the nervous butterflies of our first coffee date to slipping an engagement ring onto your finger—this is how two souls became one home.
+      </p>
+    </section>
+
+    <!-- Interactive Connected Timeline -->
+    <div class="timeline-wrapper">
+
+      <!-- Event 1: First Date -->
+      <div class="timeline-event left">
+        <div class="timeline-node">☕</div>
+        <div class="timeline-card">
+          <div class="timeline-img-box" onclick="openLightbox('images/First date.jpeg', 'Our First Date • Where Forever Started ✨')">
+            <img src="images/First date.jpeg" alt="First date moment" class="timeline-img" />
+          </div>
+          <span class="timeline-badge">The Genesis</span>
+          <h3 class="timeline-title">Our First Date &bull; The Day Everything Changed</h3>
+          <p class="timeline-story">
+            I still remember how my heart raced before meeting you. Wondering if anyone could truly be as kind and beautiful as you seemed. But the moment you sat down across from me, all my nervousness turned into absolute peace. Hours felt like seconds, and when I walked home, I whispered to myself: <em>"That's her. That's the one."</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- Event 2: Second Date -->
+      <div class="timeline-event right">
+        <div class="timeline-node">🌸</div>
+        <div class="timeline-card">
+          <div class="timeline-img-box" onclick="openLightbox('images/Second date.jpeg', 'Second Date • Falling Deeper and Harder 💕')">
+            <img src="images/Second date.jpeg" alt="Second date moment" class="timeline-img" />
+          </div>
+          <span class="timeline-badge">No Turning Back</span>
+          <h3 class="timeline-title">Second Date &bull; Falling Deeper into Your Orbit</h3>
+          <p class="timeline-story">
+            By our second date, it wasn't just a spark anymore—it was a roaring fire of affection. The sheer ease of laughing at silly jokes, walking side by side, and that unmistakable realization that your hand was made to fit right inside mine.
+          </p>
+        </div>
+      </div>
+
+      <!-- Event 3: Royal Photoshoot & Golden Hours -->
+      <div class="timeline-event left">
+        <div class="timeline-node">👑</div>
+        <div class="timeline-card">
+          <div class="timeline-img-box" onclick="openLightbox('images/_RRF6428-web.jpg', 'Golden Hours • Pure Grace and Royalty ✨')">
+            <img src="images/_RRF6428-web.jpg" alt="Photoshoot elegance" class="timeline-img" />
+          </div>
+          <span class="timeline-badge">Poetry in Motion</span>
+          <h3 class="timeline-title">Golden Hours &bull; Grace, Beauty &amp; Warmth</h3>
+          <p class="timeline-story">
+            Looking at you in these frames takes my breath away every single time. You carry yourself with such effortless grace, tenderness, and queenly poise. Standing next to you makes me feel like the luckiest man in the entire world.
+          </p>
+        </div>
+      </div>
+
+      <!-- Event 4: The Engagement -->
+      <div class="timeline-event right">
+        <div class="timeline-node">💍</div>
+        <div class="timeline-card">
+          <div class="timeline-img-box" onclick="openLightbox('images/Engagment.jpeg', 'She Said YES! • The Proudest Day of My Life 💍')">
+            <img src="images/Engagment.jpeg" alt="Engagement celebration" class="timeline-img" />
+          </div>
+          <span class="timeline-badge">The Forever Promise</span>
+          <h3 class="timeline-title">She Said YES! &bull; The Day You Became My Fiancée</h3>
+          <p class="timeline-story">
+            The proudest, most emotional day of my life. Slipping that ring on your finger wasn't just a question answered—it was a sacred vow. A promise that no matter what life brings, your Kanu will stand right beside you, cheering for your dreams, wiping your tears, and loving you unconditionally.
+          </p>
+        </div>
+      </div>
+
+      <!-- Event 5: Our Forever Ahead -->
+      <div class="timeline-event left">
+        <div class="timeline-node">🏡</div>
+        <div class="timeline-card">
+          <div class="timeline-img-box" onclick="openLightbox('images/_RRF6992-web.jpg', 'Our Forever Journey Ahead 🕊️')">
+            <img src="images/_RRF6992-web.jpg" alt="Together forever" class="timeline-img" />
+          </div>
+          <span class="timeline-badge">The Next Chapter</span>
+          <h3 class="timeline-title">A Lifetime Together &bull; Building Our Tomorrow</h3>
+          <p class="timeline-story">
+            This timeline is just the prologue to the most gorgeous love story ever written. I cannot wait to hold your hand at the mandap, call you my wife, and spend the rest of our days creating memories that outshine the stars.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Navigation to Next Chapter -->
+    <div style="text-align: center; margin-top: 50px;">
+      <a href="gallery.html" class="btn-luxury-primary" style="font-size: 1.15rem; padding: 16px 42px;">
+        <span>Continue to Chapter II: Memory Gallery (40+ Photos)</span>
+        <span>📸 &rarr;</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ===================================================================
+       FULLSCREEN LIGHTBOX MODAL
+       =================================================================== -->
+  <div class="luxury-lightbox" id="luxuryLightbox">
+    <div class="lightbox-dialog">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+      <div class="lightbox-image-wrap">
+        <img src="" alt="Enlarged photo" id="lightboxModalImg" />
+      </div>
+      <div class="lightbox-details">
+        <div class="lightbox-note" id="lightboxModalCaption"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="luxury-footer">
+    <div class="footer-quote">
+      "You are the poem I never knew how to write, and the life I always prayed to live."
+    </div>
+    <p class="footer-byline">
+      Crafted with unconditional love by <strong>Kanu (Yogi)</strong> for his precious fiancée <strong>Tuli (Tulsi)</strong> 💍❤️
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="common.js"></script>
+  <script>
+    const lightbox = document.getElementById('luxuryLightbox');
+    const modalImg = document.getElementById('lightboxModalImg');
+    const modalCaption = document.getElementById('lightboxModalCaption');
+    const closeBtn = document.getElementById('lightboxClose');
+
+    window.openLightbox = function(src, caption) {
+      if (modalImg && modalCaption && lightbox) {
+        modalImg.src = src;
+        modalCaption.textContent = caption;
+        lightbox.classList.add('active');
+        if (window.launchConfettiBurst) window.launchConfettiBurst(window.innerWidth / 2, window.innerHeight / 2, 35);
+      }
+    };
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
+    }
+    if (lightbox) {
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) lightbox.classList.remove('active');
+      });
+    }
+  </script>
+</body>
+</html>
+

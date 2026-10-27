@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Memory Gallery | Tuli &amp; Kanu 💍</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Cinematic Backdrop Layer -->
+  <div class="bg-fixed-backdrop"></div>
+  <div class="bg-vignette-overlay"></div>
+
+  <!-- Ambient & Confetti Canvases -->
+  <canvas id="ambientCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Hidden File Input for live photo swapping -->
+  <input type="file" id="extraPhotoInput" multiple accept="image/*" style="display: none;" />
+
+  <!-- ===================================================================
+       LUXURY NAVIGATION BAR
+       =================================================================== -->
+  <header class="luxury-navbar">
+    <nav class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-monogram">T&amp;K</div>
+        <div class="nav-brand-text">
+          <span class="nav-brand-title">Tuli &amp; Kanu</span>
+          <span class="nav-brand-sub">Our Universe 💍</span>
+        </div>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link"><span>🔒</span> The Vault</a></li>
+        <li><a href="story.html" class="nav-link"><span>📖</span> Our Journey</a></li>
+        <li><a href="gallery.html" class="nav-link active"><span>📸</span> Memory Gallery</a></li>
+        <li><a href="letter.html" class="nav-link"><span>💌</span> Love Note &amp; Cake</a></li>
+      </ul>
+
+      <div class="nav-audio-widget" id="navAudioWidget" title="Play / Pause romantic background melody">
+        <div class="nav-vinyl" id="navVinyl">
+          <div class="nav-vinyl-dot"></div>
+        </div>
+        <div class="nav-audio-info">
+          <span class="nav-audio-title">Kanu's Melody</span>
+          <div class="nav-audio-wave">
+            <div class="nav-wave-bar"></div>
+            <div class="nav-wave-bar"></div>
+            <div class="nav-wave-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu">&#9776;</button>
+    </nav>
+  </header>
+
+  <!-- ===================================================================
+       GALLERY CONTENT
+       =================================================================== -->
+  <main class="page-container">
+
+    <!-- Page Header -->
+    <section class="page-hero">
+      <div class="page-fiancee-badge">
+        <span>📸</span>
+        <span>Chapter II &bull; Photo Memories</span>
+        <span>💍</span>
+      </div>
+      <h1 class="page-title">
+        Our Memory <span class="highlight-tuli">Gallery</span>
+      </h1>
+      <div class="page-subtitle">
+        43 Beautiful Moments with My Dearest Tuli 💕
+      </div>
+      <p class="page-desc">
+        Every snapshot holds a heartbeat, a whisper of laughter, and a memory I will treasure for the rest of my life.
+      </p>
+
+      <div style="margin-top: 24px;">
+        <button class="btn-luxury-secondary" id="btnAddPhotosBtn">
+          <span>Upload / Add More Photos</span>
+          <span>📁</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Filter Category Tabs -->
+    <div class="gallery-category-bar">
+      <button class="category-tab-btn active" data-filter="all">
+        <span>All Moments</span>
+        <span>(43)</span>
+      </button>
+      <button class="category-tab-btn" data-filter="engagement">
+        <span>💍 Engagement</span>
+        <span>(2)</span>
+      </button>
+      <button class="category-tab-btn" data-filter="dates">
+        <span>☕ Dates &amp; Outings</span>
+        <span>(8)</span>
+      </button>
+      <button class="category-tab-btn" data-filter="photoshoot">
+        <span>👑 Royal Photoshoot</span>
+        <span>(7)</span>
+      </button>
+      <button class="category-tab-btn" data-filter="candids">
+        <span>🌸 Candid Smiles</span>
+        <span>(26)</span>
+      </button>
+    </div>
+
+    <!-- Grand Dynamic Polaroid Grid -->
+    <div class="grand-gallery-grid" id="grandGalleryGrid">
+      <!-- Generated dynamically by script below -->
+    </div>
+
+    <!-- Navigation to Next Chapter -->
+    <div style="text-align: center; margin-top: 60px;">
+      <a href="letter.html" class="btn-luxury-primary" style="font-size: 1.15rem; padding: 16px 42px;">
+        <span>Continue to Chapter III: Love Letter &amp; Birthday Cake</span>
+        <span>💌 &rarr;</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ===================================================================
+       FULLSCREEN LIGHTBOX MODAL WITH NEXT / PREV NAVIGATION
+       =================================================================== -->
+  <div class="luxury-lightbox" id="luxuryLightbox">
+    <div class="lightbox-dialog">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close modal">&times;</button>
+      <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrev" aria-label="Previous photo">&#10094;</button>
+      <button class="lightbox-nav-btn lightbox-next" id="lightboxNext" aria-label="Next photo">&#10095;</button>
+
+      <div class="lightbox-image-wrap">
+        <img src="" alt="Enlarged photo" id="lightboxModalImg" />
+      </div>
+      <div class="lightbox-details">
+        <div class="lightbox-note" id="lightboxModalCaption"></div>
+        <div id="lightboxIndexIndicator" style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 4px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="luxury-footer">
+    <div class="footer-quote">
+      "You will forever be my always."
+    </div>
+    <p class="footer-byline">
+      Crafted with unconditional love by <strong>Kanu (Yogi)</strong> for his precious fiancée <strong>Tuli (Tulsi)</strong> 💍❤️
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="common.js"></script>
+  <script>
+    const photoData = [
+      { src: 'images/Engagment.jpeg', category: 'engagement', caption: 'The Moment She Said YES! 💍', sub: 'Our sacred promise' },
+      { src: 'images/Engagment (2).jpeg', category: 'engagement', caption: 'Two Souls, One Ring 💖', sub: 'Forever tied' },
+      { src: 'images/First date.jpeg', category: 'dates', caption: 'Where It All Began ☕', sub: 'Our very first date' },
+      { src: 'images/Second date.jpeg', category: 'dates', caption: 'Second Date Magic 🌸', sub: 'Falling deeper' },
+      { src: 'images/_RRF6428-web.jpg', category: 'photoshoot', caption: 'Queen of My Heart 👑', sub: 'Pure elegance' },
+      { src: 'images/_RRF6444-web.jpg', category: 'photoshoot', caption: 'Golden Hour Poetry ✨', sub: 'Breathtaking beauty' },
+      { src: 'images/_RRF6356-web.jpg', category: 'photoshoot', caption: 'Radiant Smile That Lights My Life 🌸', sub: 'Favorite sight' },
+      { src: 'images/_RRF6438-web.jpg', category: 'photoshoot', caption: 'Royalty & Grace 🌹', sub: 'Timeless portrait' },
+      { src: 'images/_RRF6560-web.jpg', category: 'photoshoot', caption: 'Holding You Close Forever 💫', sub: 'My safe place' },
+      { src: 'images/_RRF6983-web.jpg', category: 'photoshoot', caption: 'Our Tomorrow is Golden 🌅', sub: 'Together always' },
+      { src: 'images/_RRF6992-web.jpg', category: 'photoshoot', caption: "Kanu's One & Only Tuli 🕊️", sub: 'Forever yours' },
+      { src: 'images/IMG_2794.JPG.jpeg', category: 'candids', caption: 'Little Moments, Big Love 💖', sub: 'Treasured memory' },
+      { src: 'images/IMG_2829.JPG.jpeg', category: 'candids', caption: 'Sun-Kissed & Smiling ☀️', sub: 'Natural glow' },
+      { src: 'images/IMG_7713.JPG.jpeg', category: 'candids', caption: 'Silly Faces & Pure Fun 🐣', sub: 'Always laughing with you' },
+      { src: 'images/IMG_7719.JPG.jpeg', category: 'candids', caption: 'My Favorite Distraction 📱', sub: 'Endless sweetness' },
+      { src: 'images/IMG_7728.JPG.jpeg', category: 'candids', caption: 'Effortlessly Gorgeous 🌸', sub: 'No filters needed' },
+      { src: 'images/IMG_7735.JPG.jpeg', category: 'candids', caption: 'Peace in Your Presence 🕊️', sub: 'My comfort zone' },
+      { src: 'images/IMG_8086.JPG.jpeg', category: 'candids', caption: 'Late Night Banter 🌙', sub: 'Hours like seconds' },
+      { src: 'images/IMG_8099.JPG.jpeg', category: 'candids', caption: 'Everyday Happiness 💕', sub: 'Simplicity and love' },
+      { src: 'images/IMG_8304.JPG.jpeg', category: 'dates', caption: 'Café Dates with Tuli 🍰', sub: 'Sweet treats & sweeter you' },
+      { src: 'images/IMG_8351.JPG.jpeg', category: 'dates', caption: 'Foodie Adventures 🍕', sub: 'Eating our favorites' },
+      { src: 'images/IMG_8383.JPG.jpeg', category: 'dates', caption: 'A Toast to Us 🥂', sub: 'Celebrating life' },
+      { src: 'images/IMG_8473.JPG.jpeg', category: 'candids', caption: 'Your Cute Pouts 🥺', sub: 'Impossibly adorable' },
+      { src: 'images/IMG_8477.JPG.jpeg', category: 'candids', caption: 'Playful Moods 🎀', sub: 'Only for Kanu' },
+      { src: 'images/IMG_8789.JPG.jpeg', category: 'dates', caption: 'Casual Days, Deep Connection 👟', sub: 'Everyday romance' },
+      { src: 'images/IMG_8854.JPG.jpeg', category: 'dates', caption: 'Walking Hand in Hand 🤝', sub: 'Right where I belong' },
+      { src: 'images/IMG_8979.JPG.jpeg', category: 'candids', caption: 'A Smile That Brightens Dark Days 🌟', sub: 'Pure warmth' },
+      { src: 'images/IMG_9058.JPG.jpeg', category: 'candids', caption: 'Deep Conversations & Dreams 💭', sub: 'Our future together' },
+      { src: 'images/IMG_9331.JPG.jpeg', category: 'candids', caption: 'Unfiltered Sweetness 🍬', sub: 'The sweetest girl' },
+      { src: 'images/IMG_9738.JPG.jpeg', category: 'candids', caption: 'Dressed Up & Stunning 💄', sub: 'Head turner' },
+      { src: 'images/IMG_9750.JPG.jpeg', category: 'candids', caption: 'Candid Beauty in Motion 📸', sub: 'Always picture perfect' },
+      { src: 'images/IMG_9756.JPG.jpeg', category: 'candids', caption: 'Eyes That Speak Volumes 👀', sub: 'I see my whole world' },
+      { src: 'images/IMG_9758.JPG.jpeg', category: 'candids', caption: 'Soft Whispers & Giggles 🤭', sub: 'Inside jokes' },
+      { src: 'images/IMG_9772.JPG.jpeg', category: 'candids', caption: 'Unforgettable Moments 🎞️', sub: 'Saved in my heart' },
+      { src: 'images/IMG_9790.JPG.jpeg', category: 'candids', caption: 'Just You & Me 💑', sub: 'Against the world' },
+      { src: 'images/IMG_9825.JPG.jpeg', category: 'candids', caption: 'My Heartbeat 💓', sub: 'Forever beating for you' },
+      { src: 'images/IMG_9832.JPG.jpeg', category: 'candids', caption: 'Golden Memories 🏆', sub: 'More precious than gold' },
+      { src: 'images/IMG_9870.JPG.jpeg', category: 'candids', caption: 'My Forever Person 💍', sub: 'Kanu & Tuli' },
+      { src: 'images/IMG_9871.JPG.jpeg', category: 'candids', caption: 'To Eternity and Beyond 🚀', sub: 'I love you' }
+    ];
+
+    const grid = document.getElementById('grandGalleryGrid');
+    let currentFilter = 'all';
+    let currentVisiblePhotos = [...photoData];
+    let activeLightboxIndex = 0;
+
+    function renderGallery() {
+      grid.innerHTML = '';
+      currentVisiblePhotos = photoData.filter(p => currentFilter === 'all' || p.category === currentFilter);
+
+      currentVisiblePhotos.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'gallery-item-card';
+
+        card.innerHTML = `
+          <div class="gallery-img-box">
+            <img src="${item.src}" alt="${item.caption}" class="gallery-photo" loading="lazy" />
+            <div class="gallery-heart-reaction" title="Love this memory">💖</div>
+          </div>
+          <div class="gallery-caption">
+            <div class="gallery-handwritten-note">${item.caption}</div>
+            <div class="gallery-tag-sub">${item.sub}</div>
+          </div>
+        `;
+
+        // 3D Tilt Effect
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const rX = ((y - rect.height / 2) / (rect.height / 2)) * -10;
+          const rY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
+          card.style.transform = `perspective(1000px) rotateX(${rX}deg) rotateY(${rY}deg) translateY(-8px) scale(1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+
+        // Click to open Lightbox
+        card.addEventListener('click', (e) => {
+          // If clicked heart, just trigger micro heart reaction
+          if (e.target.classList.contains('gallery-heart-reaction')) {
+            e.stopPropagation();
+            if (window.launchConfettiBurst) {
+              const r = e.target.getBoundingClientRect();
+              window.launchConfettiBurst(r.left + 15, r.top + 15, 20);
+            }
+            return;
+          }
+          openGalleryLightbox(index);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Filter Buttons
+    document.querySelectorAll('.category-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderGallery();
+      });
+    });
+
+    renderGallery();
+
+    // Lightbox Controls
+    const lightbox = document.getElementById('luxuryLightbox');
+    const modalImg = document.getElementById('lightboxModalImg');
+    const modalCaption = document.getElementById('lightboxModalCaption');
+    const modalIndicator = document.getElementById('lightboxIndexIndicator');
+    const closeBtn = document.getElementById('lightboxClose');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+
+    function openGalleryLightbox(idx) {
+      activeLightboxIndex = idx;
+      updateLightboxDisplay();
+      lightbox.classList.add('active');
+      if (window.launchConfettiBurst) window.launchConfettiBurst(window.innerWidth / 2, window.innerHeight / 2, 35);
+    }
+
+    function updateLightboxDisplay() {
+      if (currentVisiblePhotos.length === 0) return;
+      const photo = currentVisiblePhotos[activeLightboxIndex];
+      modalImg.src = photo.src;
+      modalCaption.textContent = photo.caption;
+      modalIndicator.textContent = `Photo ${activeLightboxIndex + 1} of ${currentVisiblePhotos.length}`;
+    }
+
+    function showNextPhoto() {
+      activeLightboxIndex = (activeLightboxIndex + 1) % currentVisiblePhotos.length;
+      updateLightboxDisplay();
+    }
+
+    function showPrevPhoto() {
+      activeLightboxIndex = (activeLightboxIndex - 1 + currentVisiblePhotos.length) % currentVisiblePhotos.length;
+      updateLightboxDisplay();
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
+    if (nextBtn) nextBtn.addEventListener('click', showNextPhoto);
+    if (prevBtn) prevBtn.addEventListener('click', showPrevPhoto);
+
+    if (lightbox) {
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) lightbox.classList.remove('active');
+      });
+    }
+
+    // Keyboard support (Left, Right, Esc)
+    window.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'ArrowRight') showNextPhoto();
+      if (e.key === 'ArrowLeft') showPrevPhoto();
+      if (e.key === 'Escape') lightbox.classList.remove('active');
+    });
+
+    // Add Photos Button
+    const addPhotosBtn = document.getElementById('btnAddPhotosBtn');
+    const extraPhotoInput = document.getElementById('extraPhotoInput');
+
+    if (addPhotosBtn && extraPhotoInput) {
+      addPhotosBtn.addEventListener('click', () => extraPhotoInput.click());
+
+      extraPhotoInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+
+        files.forEach((file, idx) => {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            photoData.unshift({
+              src: ev.target.result,
+              category: 'candids',
+              caption: `Sweet Memory ${photoData.length + 1} 💖`,
+              sub: 'Just added'
+            });
+            renderGallery();
+          };
+          reader.readAsDataURL(file);
+        });
+
+        if (window.launchConfettiBurst) window.launchConfettiBurst(window.innerWidth / 2, window.innerHeight / 2, 60);
+      });
+    }
+  </script>
+</body>
+</html>
+

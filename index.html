@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy 24th Birthday, Tulsi! 💍✨ | Forever Yours, Kanu</title>
+  <meta name="description" content="A royal, immersive celebration crafted with unconditional love by Kanu (Yogi) for his beautiful fiancée Tulsi (Tuli) on her 24th birthday." />
+
+  <!-- Google Fonts: Editorial Luxury Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="deck-mode">
+
+  <!-- ===================================================================
+       CINEMATIC FULL-SCREEN BACKGROUND PHOTO & VIGNETTE
+       =================================================================== -->
+  <div class="bg-fixed-backdrop" id="bgFixedBackdrop"></div>
+  <div class="bg-vignette-overlay" aria-hidden="true"></div>
+
+  <!-- ===================================================================
+       CANVAS LAYERS: 3D WEBGL WORLD, AMBIENT ROSE PETALS & CONFETTI
+       =================================================================== -->
+  <canvas id="webglCanvas" aria-hidden="true"></canvas>
+  <canvas id="ambientCanvas" aria-hidden="true"></canvas>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <!-- ===================================================================
+       FULL-SCREEN CINEMATIC INTRO: FIREWORKS, BALLOONS & BIRTHDAY MESSAGE
+       (No touch interruption allowed during the grand animation)
+       =================================================================== -->
+  <div class="grand-intro-screen" id="grandIntroScreen">
+    <canvas id="introFireworksCanvas" class="intro-fireworks-canvas"></canvas>
+    
+    <!-- Floating Soaring Fire Balloons -->
+    <div class="intro-balloons-container" id="introBalloonsContainer"></div>
+
+    <div class="intro-content-box" id="introContentBox">
+      <div class="intro-crown-icon">👑</div>
+      <h1 class="intro-main-title">Happy Birthday My Love, Dear Tuli</h1>
+      <div class="intro-sub-title">🌸 Forever Yours, Kanu 🌸</div>
+      <div class="intro-sparkle-row">
+        <span>✨</span><span>💖</span><span>💍</span><span>💖</span><span>✨</span>
+      </div>
+      <button class="intro-enter-btn" id="introEnterBtn" title="Enter Our Love Story">
+        <span>Enter Our Story</span>
+        <span>✨ &rarr;</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Fluid Magnetic Cursor -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- ===================================================================
+       GLOBAL TOP BAR: BRANDING, MUSIC CONTROLLER & STORY PROGRESS
+       =================================================================== -->
+  <header class="luxury-top-bar">
+    <!-- Story Progress Bar (Mobile & Desktop) -->
+    <div class="story-progress-bar" id="storyProgressBar">
+      <span class="story-segment active" data-index="0" title="Chapter 1"></span>
+      <span class="story-segment" data-index="1" title="Chapter 2"></span>
+      <span class="story-segment" data-index="2" title="Chapter 3"></span>
+      <span class="story-segment" data-index="3" title="Chapter 4"></span>
+      <span class="story-segment" data-index="4" title="Chapter 5"></span>
+      <span class="story-segment" data-index="5" title="Chapter 6"></span>
+      <span class="story-segment" data-index="6" title="Chapter 7"></span>
+    </div>
+
+    <div class="top-bar-left">
+      <span class="royal-monogram">💍 T &bull; Y</span>
+      <span class="top-bar-divider"></span>
+      <span class="top-bar-title">Happy 24th Birthday, Tulsi</span>
+    </div>
+
+    <div class="top-bar-right">
+      <!-- Music Pill Controller -->
+      <button class="music-pill-btn" id="musicPillBtn" title="Play / Pause Birthday Melody" aria-label="Toggle background music">
+        <span class="music-note-icon">🎵</span>
+        <span class="music-pill-text" id="musicStatusText">Birthday Melody</span>
+        <div class="sound-wave-bars" id="soundWaveBars">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       DISCRETE DECK SLIDES (1 PAGE AT A TIME - AWWWARDS ARCHITECTURE)
+       =================================================================== -->
+  <main class="deck-viewport" id="deckViewport">
+
+    <!-- ===============================================================
+         SLIDE 1: 🌸 THE ROYAL BIRTHDAY ENTRANCE (HERO)
+         =============================================================== -->
+    <section class="deck-slide active" id="slide1" data-slide="0">
+
+      <!-- Slide Main Card Container -->
+      <div class="slide-content-card hero-card">
+        
+        <!-- Header Tag & Progress -->
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 01 &bull; Royal Entrance</span>
+          <div class="balloon-progress-badge" id="balloonProgressBadge" title="Tap to see collected love notes">
+            <span>🎈</span>
+            <span id="balloonProgressLabel">Kanu's Secret Notes: <strong>0 / 6</strong></span>
+          </div>
+        </div>
+
+        <!-- Big Editorial Headline -->
+        <div class="hero-header-box">
+          <h1 class="hero-title">
+            Happy 24th Birthday, <span class="shimmer-text">Tulsi</span>!
+          </h1>
+          <div class="hero-cursive-subtitle">
+            To My Beautiful Fiancée &bull; Forever Yours, Kanu 🌸
+          </div>
+        </div>
+
+        <!-- Hero Split Grid -->
+        <div class="hero-split-grid">
+          <!-- Left Column: Visual Showcase (Royal Arched Portrait) -->
+          <div class="hero-visual-column">
+            <div class="royal-arch-showcase">
+              <div class="royal-arch-aura"></div>
+              <div class="royal-arch-frame" id="heroArchFrame" title="Tap to switch portrait">
+                <img src="images/Engagment (2).jpeg" alt="Tulsi &amp; Yogi Engagement" class="royal-arch-img" id="heroArchImg" />
+                <div class="royal-arch-sheen"></div>
+                <div class="royal-arch-plaque">
+                  <span class="arch-plaque-icon">💍</span>
+                  <div class="arch-plaque-text">
+                    <span class="arch-plaque-title" id="archPlaqueTitle">Two Souls, One Ring</span>
+                    <span class="arch-plaque-sub" id="archPlaqueSub">Kanu &amp; Tuli &bull; Sacred Vow</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-portrait-tabs" id="heroPortraitTabs">
+                <button class="hero-ptab active" data-src="images/Engagment (2).jpeg" data-title="Two Souls, One Ring" data-sub="Kanu &amp; Tuli &bull; Sacred Vow">💍 The Ring</button>
+                <button class="hero-ptab" data-src="images/Engagment.jpeg" data-title="The Moment She Said YES" data-sub="Sacred Vow &bull; Engagement">✨ Proposal</button>
+                <button class="hero-ptab" data-src="images/_RRF6428-web.jpg" data-title="Queen of My Universe" data-sub="Tulsi &bull; Birthday Girl">👑 Queen Tuli</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: 6 Interactive Pop Balloons & Concise Dedication -->
+          <div class="hero-text-column">
+            <!-- 🎈 KANU'S 6 INTERACTIVE POP BALLOONS -->
+            <div class="hero-balloons-showcase" id="heroBalloonsShowcase">
+              <div class="balloons-banner-title">
+                <span class="sparkle-star">✨</span>
+                <span class="balloons-title-text">🎈 Tap Balloons to Reveal Kanu's Notes! 🎈</span>
+                <span class="sparkle-star">✨</span>
+              </div>
+              
+              <div class="balloons-deck-row" id="balloonsDeckRow">
+                <div class="floating-balloon balloon-c1" data-id="1" data-msg="Bov Badhu love you bacchudi ❤️" title="Tap to pop balloon 1!">
+                  <div class="balloon-body">
+                    <span class="balloon-inner-icon">💖</span>
+                    <span class="balloon-num">1</span>
+                  </div>
+                  <div class="balloon-knot"></div>
+                  <div class="balloon-string"></div>
+                  <span class="balloon-pop-tip">POP 🎈</span>
+                </div>
+
+                <div class="floating-balloon balloon-c2" data-id="2" data-msg="You are so special to me, my sweetest angel ✨" title="Tap to pop balloon 2!">
+                  <div class="balloon-body">
+                    <span class="balloon-inner-icon">✨</span>
+                    <span class="balloon-num">2</span>
+                  </div>
+                  <div class="balloon-knot"></div>
+                  <div class="balloon-string"></div>
+                  <span class="balloon-pop-tip">POP 🎈</span>
+                </div>
+
+                <div class="floating-balloon balloon-c3" data-id="3" data-msg="My future wife, my greatest dream come true 💍" title="Tap to pop balloon 3!">
+                  <div class="balloon-body">
+                    <span class="balloon-inner-icon">💍</span>
+                    <span class="balloon-num">3</span>
+                  </div>
+                  <div class="balloon-knot"></div>
+                  <div class="balloon-string"></div>
+                  <span class="balloon-pop-tip">POP 🎈</span>
+                </div>
+
+                <div class="floating-balloon balloon-c4" data-id="4" data-msg="Your smile is the most beautiful thing in the universe 🌸" title="Tap to pop balloon 4!">
+                  <div class="balloon-body">
+                    <span class="balloon-inner-icon">🌸</span>
+                    <span class="balloon-num">4</span>
+                  </div>
+                  <div class="balloon-knot"></div>
+                  <div class="balloon-string"></div>
+                  <span class="balloon-pop-tip">POP 🎈</span>
+                </div>
+
+                <div class="floating-balloon balloon-c5" data-id="5" data-msg="Always by your side, holding your hand forever 🤝" title="Tap to pop balloon 5!">
+                  <div class="balloon-body">
+                    <span class="balloon-inner-icon">🤝</span>
+                    <span class="balloon-num">5</span>
+                  </div>
+                  <div class="balloon-knot"></div>
+                  <div class="balloon-string"></div>
+                  <span class="balloon-pop-tip">POP 🎈</span>
+                </div>
+
+                <div class="floating-balloon balloon-c6" data-id="6" data-msg="Happy 24th Birthday my princess Tuli, forever yours Kanu 👑💖" title="Tap to pop balloon 6!">
+                  <div class="balloon-body">
+                    <span class="balloon-inner-icon">🎂</span>
+                    <span class="balloon-num">6</span>
+                  </div>
+                  <div class="balloon-knot"></div>
+                  <div class="balloon-string"></div>
+                  <span class="balloon-pop-tip">POP 🎈</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-royal-pill">
+              <span>👑 Celebrating 24 Radiant Years with Kanu ✨</span>
+            </div>
+
+            <!-- Single Clean Action Button -->
+            <div class="hero-button-row">
+              <button class="btn-primary-glow" id="startStoryBtn" data-goto="1">
+                <span>Begin Our Journey</span>
+                <span>🎬 &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         SLIDE 2: 🎬 CINEMATIC LOVE REEL ("MUST WATCH")
+         =============================================================== -->
+    <section class="deck-slide" id="slide2" data-slide="1">
+      <div class="slide-content-card cinema-card">
+        
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 02 &bull; Must Watch</span>
+          <span class="card-sub-tag">❤️ Special Film for Tuli</span>
+        </div>
+
+        <div class="cinema-header-box">
+          <h2 class="section-title">Our Moments 🎬</h2>
+          <div class="section-subtitle">A journey of two souls becoming one home</div>
+        </div>
+
+        <!-- Widescreen Cinema Reel Display -->
+        <div class="cinema-projector">
+          <!-- Story Progress Segments -->
+          <div class="cinema-segments" id="cinemaSegments"></div>
+
+          <!-- Slide Visual & Overlay -->
+          <div class="cinema-screen" id="cinemaScreen">
+            <img src="images/Engagment.jpeg" alt="Cinematic moment" class="cinema-img" id="cinemaImg" />
+            <div class="cinema-overlay">
+              <div class="cinema-tag" id="cinemaTag">Chapter I • The Sacred Promise 💍</div>
+              <h3 class="cinema-headline" id="cinemaHeading">The Moment She Said YES!</h3>
+              <p class="cinema-caption" id="cinemaDesc">The moment she said YES to forever.</p>
+            </div>
+            <!-- Click zones for skip -->
+            <div class="cinema-click-zone left" id="cinemaPrevZone" title="Previous photo"></div>
+            <div class="cinema-click-zone right" id="cinemaNextZone" title="Next photo"></div>
+          </div>
+
+          <!-- Reel Bottom Controls -->
+          <div class="cinema-controls">
+            <button class="cinema-btn" id="cinemaPrevBtn" aria-label="Previous">&larr; Previous</button>
+            <button class="cinema-btn play-btn" id="cinemaPlayBtn">▶ Play</button>
+            <button class="cinema-btn" id="cinemaNextBtn" aria-label="Next">Next &rarr;</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px; text-align: center;">
+          <button class="btn-primary-glow" data-goto="2">
+            <span>Continue to The Sacred Vow</span>
+            <span>💍 &rarr;</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         SLIDE 3: 💍 THE SACRED VOW & PROPOSAL
+         =============================================================== -->
+    <section class="deck-slide" id="slide3" data-slide="2">
+      <div class="slide-content-card vow-card">
+        
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 03 &bull; The Sacred Vow</span>
+          <span class="card-sub-tag">💍 Eternal Promise</span>
+        </div>
+
+        <div class="vow-split-grid">
+          <!-- Left Column: Story Prose -->
+          <div class="vow-story-col">
+            <h2 class="section-title">A Sacred Vow 💍</h2>
+            <div class="section-subtitle">Written for my future wife</div>
+            
+            <p class="vow-prose">
+              The day I slid that ring onto your finger was my solemn promise to love, protect, and cherish you through all of eternity.
+            </p>
+
+            <div class="vow-quote-pill">
+              &ldquo;Two souls, one heart. Soon my wife.&rdquo;
+            </div>
+
+            <div style="margin-top: 22px;">
+              <button class="btn-primary-glow" data-goto="3">
+                <span>Explore 39 Curated Memories</span>
+                <span>📸 &rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Highlight Card -->
+          <div class="vow-visual-col">
+            <div class="vow-photo-frame">
+              <img src="images/Engagment (2).jpeg" alt="Engagement ring vow" class="vow-img" />
+              <div class="vow-stamp-seal">💍</div>
+              <div class="vow-badge-text">Forever Sealed &bull; Yogi &amp; Tulsi</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         SLIDE 4: 📸 OUR CURATED POLAROID ALBUM (EXACT VERIFIED PHOTOS)
+         =============================================================== -->
+    <section class="deck-slide" id="slide4" data-slide="3">
+      <div class="slide-content-card gallery-card">
+        
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 04 &bull; Treasured Memories</span>
+          <span class="card-sub-tag">📸 39 Beautiful Moments</span>
+        </div>
+
+        <div class="gallery-header-box">
+          <h2 class="section-title">A Lifetime of Smiles With You 💕</h2>
+          <div class="section-subtitle">Every candid giggle, sunset walk, and cozy date captured forever</div>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="gallery-filter-tabs">
+          <button class="gallery-tab active" data-filter="all">All Memories (39)</button>
+          <button class="gallery-tab" data-filter="engagement">Engagement 💍 (2)</button>
+          <button class="gallery-tab" data-filter="dates">Dates ☕ (7)</button>
+          <button class="gallery-tab" data-filter="photoshoot">Portraits 👑 (8)</button>
+          <button class="gallery-tab" data-filter="candids">Candids 🌸 (22)</button>
+        </div>
+
+        <!-- Masonry Grid with Custom Sleek Scrollbar -->
+        <div class="polaroid-deck-grid" id="polaroidDeckGrid">
+          <!-- Dynamically populated by JS from verified photo dataset -->
+        </div>
+
+        <div style="margin-top: 18px; text-align: center;">
+          <button class="btn-primary-glow" data-goto="4">
+            <span>24 Reasons Why I Love You</span>
+            <span>💖 &rarr;</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         SLIDE 5: 💖 24 REASONS WHY I LOVE YOU (INTERACTIVE DECK)
+         =============================================================== -->
+    <section class="deck-slide" id="slide5" data-slide="4">
+      <div class="slide-content-card reasons-card">
+        
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 05 &bull; 24 Reasons</span>
+          <span class="card-sub-tag">💖 One For Every Year</span>
+        </div>
+
+        <div class="reasons-header-box">
+          <h2 class="section-title">24 Reasons Why I Adore You, Tulsi 🌸</h2>
+          <div class="section-subtitle">Swipe or tap to explore each sweet reason</div>
+        </div>
+
+        <!-- Interactive 3D Card Stack -->
+        <div class="reason-card-container">
+          <div class="reason-flip-card" id="reasonFlipCard">
+            <div class="reason-card-inner">
+              <div class="reason-counter-pill" id="reasonCounterPill">Reason 01 / 24</div>
+              <div class="reason-icon-display" id="reasonIconDisplay">🌸</div>
+              <h3 class="reason-title-display" id="reasonTitleDisplay">Your Pure, Radiant Heart</h3>
+              <p class="reason-desc-display" id="reasonDescDisplay">
+                The way you care for the people around you with zero pretension and pure kindness melts me completely every single day.
+              </p>
+              <div class="reason-quote-footer" id="reasonQuoteFooter">— Kanu loves this about you ❤️</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Deck Controls -->
+        <div class="reason-nav-row">
+          <button class="cinema-btn" id="prevReasonBtn">&larr; Previous Reason</button>
+          <div class="reason-dots-track" id="reasonDotsTrack"></div>
+          <button class="cinema-btn" id="nextReasonBtn">Next Reason &rarr;</button>
+        </div>
+
+        <div style="margin-top: 18px; text-align: center;">
+          <button class="btn-primary-glow" data-goto="5">
+            <span>Make a Birthday Wish</span>
+            <span>🎂 &rarr;</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         SLIDE 6: 🎂 BIRTHDAY TRADITION & MAKE A WISH
+         =============================================================== -->
+    <section class="deck-slide" id="slide6" data-slide="5">
+      <div class="slide-content-card cake-card">
+        
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 06 &bull; Birthday Tradition</span>
+          <span class="card-sub-tag">🎂 Make A Wish</span>
+        </div>
+
+        <div class="cake-header-box">
+          <h2 class="section-title">Make a Birthday Wish, Tuli! 🎂✨</h2>
+          <div class="section-subtitle">Close your eyes, make the sweetest wish in your heart, and tap the candles to blow them out!</div>
+        </div>
+
+        <!-- Interactive Royal Illustrated 3D Birthday Cake -->
+        <div class="cake-interactive-stage" id="cakeStage" title="Tap candles to blow them out!">
+          <svg viewBox="0 0 280 260" class="royal-cake-svg">
+            <defs>
+              <linearGradient id="goldPlateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#C59B27"/>
+                <stop offset="50%" stop-color="#FFD166"/>
+                <stop offset="100%" stop-color="#C59B27"/>
+              </linearGradient>
+              <linearGradient id="tierBottomGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFCAD4"/>
+                <stop offset="20%" stop-color="#FF9EAA"/>
+                <stop offset="100%" stop-color="#FF7B89"/>
+              </linearGradient>
+              <linearGradient id="tierTopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFFDF9"/>
+                <stop offset="30%" stop-color="#FFF0EB"/>
+                <stop offset="100%" stop-color="#FFCAD4"/>
+              </linearGradient>
+              <radialGradient id="candleGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#FFD166" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#FF7B89" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#FF7B89" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#D92E4E"/>
+                <stop offset="40%" stop-color="#FF7B89"/>
+                <stop offset="80%" stop-color="#FFD166"/>
+                <stop offset="100%" stop-color="#FFF"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Golden Serving Platter (Bottom) -->
+            <ellipse cx="140" cy="235" rx="125" ry="18" fill="url(#goldPlateGrad)"/>
+            <ellipse cx="140" cy="232" rx="118" ry="14" fill="#FFE494"/>
+            <ellipse cx="140" cy="230" rx="115" ry="12" fill="#E6BA38"/>
+
+            <!-- Bottom Tier Shadow & Cylinder Body -->
+            <path d="M45,170 C45,185 85,200 140,200 C195,200 235,185 235,170 L235,215 C235,228 195,238 140,238 C85,238 45,228 45,215 Z" fill="#D95C6B"/>
+            <path d="M45,160 C45,175 85,190 140,190 C195,190 235,175 235,160 L235,210 C235,225 195,235 140,235 C85,235 45,225 45,210 Z" fill="url(#tierBottomGrad)"/>
+            <ellipse cx="140" cy="160" rx="95" ry="22" fill="#FFE5DA"/>
+
+            <!-- Bottom Tier Cream Drips & Gold Pearls -->
+            <path d="M45,165 Q60,185 75,165 Q90,190 105,165 Q125,195 140,165 Q155,195 175,165 Q190,190 205,165 Q220,185 235,165" fill="none" stroke="#FFF" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="55" cy="180" r="3" fill="#FFD166"/>
+            <circle cx="85" cy="188" r="3" fill="#FFD166"/>
+            <circle cx="115" cy="192" r="3" fill="#FFD166"/>
+            <circle cx="140" cy="194" r="3.5" fill="#FFD166"/>
+            <circle cx="165" cy="192" r="3" fill="#FFD166"/>
+            <circle cx="195" cy="188" r="3" fill="#FFD166"/>
+            <circle cx="225" cy="180" r="3" fill="#FFD166"/>
+
+            <!-- Top Tier Body -->
+            <path d="M75,105 C75,118 104,130 140,130 C176,130 205,118 205,105 L205,150 C205,162 176,172 140,172 C104,172 75,162 75,150 Z" fill="#E8A598"/>
+            <path d="M75,95 C75,108 104,120 140,120 C176,120 205,108 205,95 L205,145 C205,158 176,168 140,168 C104,168 75,158 75,145 Z" fill="url(#tierTopGrad)"/>
+            <ellipse cx="140" cy="95" rx="65" ry="18" fill="#FFFDF9"/>
+
+            <!-- Top Tier Cream Frosting Drips -->
+            <path d="M75,100 Q90,118 105,100 Q120,122 140,100 Q160,122 175,100 Q190,118 205,100" fill="none" stroke="#FF7B89" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Strawberries & Roses on Top -->
+            <circle cx="105" cy="92" r="6" fill="#D92E4E"/>
+            <circle cx="175" cy="92" r="6" fill="#D92E4E"/>
+            <circle cx="140" cy="96" r="7" fill="#FF7B89"/>
+
+            <!-- 3 Glowing Candles -->
+            <!-- Left Candle -->
+            <rect x="105" y="48" width="8" height="42" rx="3" fill="#FFE5DA" stroke="#FF7B89" stroke-width="1"/>
+            <path d="M106,58 L112,54 M106,68 L112,64 M106,78 L112,74" stroke="#FF7B89" stroke-width="1.5"/>
+            <line x1="109" y1="48" x2="109" y2="40" stroke="#333" stroke-width="1.5"/>
+
+            <!-- Middle Candle -->
+            <rect x="136" y="42" width="8" height="48" rx="3" fill="#FFE5DA" stroke="#FFD166" stroke-width="1"/>
+            <path d="M137,54 L143,50 M137,64 L143,60 M137,74 L143,70 M137,84 L143,80" stroke="#FFD166" stroke-width="1.5"/>
+            <line x1="140" y1="42" x2="140" y2="34" stroke="#333" stroke-width="1.5"/>
+
+            <!-- Right Candle -->
+            <rect x="167" y="48" width="8" height="42" rx="3" fill="#FFE5DA" stroke="#FF7B89" stroke-width="1"/>
+            <path d="M168,58 L174,54 M168,68 L174,64 M168,78 L174,74" stroke="#FF7B89" stroke-width="1.5"/>
+            <line x1="171" y1="48" x2="171" y2="40" stroke="#333" stroke-width="1.5"/>
+
+            <!-- Flickering Candle Flames with Golden Halos -->
+            <g class="candle-flame-group" id="flame1">
+              <ellipse cx="109" cy="28" rx="14" ry="18" fill="url(#candleGlow)"/>
+              <path d="M109,14 C115,24 117,30 115,35 C113,40 105,40 103,35 C101,30 105,24 109,14 Z" fill="url(#flameGrad)"/>
+              <ellipse cx="109" cy="33" rx="2.5" ry="4" fill="#FFF"/>
+            </g>
+
+            <g class="candle-flame-group" id="flame2">
+              <ellipse cx="140" cy="22" rx="16" ry="20" fill="url(#candleGlow)"/>
+              <path d="M140,6 C147,17 149,24 147,29 C145,34 135,34 133,29 C131,24 135,17 140,6 Z" fill="url(#flameGrad)"/>
+              <ellipse cx="140" cy="27" rx="3" ry="5" fill="#FFF"/>
+            </g>
+
+            <g class="candle-flame-group" id="flame3">
+              <ellipse cx="171" cy="28" rx="14" ry="18" fill="url(#candleGlow)"/>
+              <path d="M171,14 C177,24 179,30 177,35 C175,40 167,40 165,35 C163,30 167,24 171,14 Z" fill="url(#flameGrad)"/>
+              <ellipse cx="171" cy="33" rx="2.5" ry="4" fill="#FFF"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Unlocked Wish Banner -->
+        <div class="wish-reveal-box" id="wishRevealBox">
+          <h3 class="wish-congrats-title">🎉 HAPPY 24TH BIRTHDAY, MY PRINCESS! 🎉</h3>
+          <p class="wish-congrats-text">
+            May every dream, prayer, and secret wish you made today blossom into reality. Kanu will be standing right by your side celebrating every step of your journey! 🌟💖
+          </p>
+          <div style="margin-top: 14px; text-align: center;">
+            <button class="btn-royal-rose" id="relightCandlesBtn" title="Relight the candles to make another wish!">
+              <span>✨ Relight Candles &amp; Make Another Wish 🎂</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; text-align: center;">
+          <button class="btn-primary-glow" data-goto="6">
+            <span>Read Kanu's Personal Letter &rarr;</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         SLIDE 7: 💌 THE ROYAL WAX-SEALED LETTER
+         =============================================================== -->
+    <section class="deck-slide" id="slide7" data-slide="6">
+      <div class="slide-content-card letter-card">
+        
+        <div class="card-header-badge-row">
+          <span class="chapter-tag">Chapter 07 &bull; Forever Love</span>
+          <span class="card-sub-tag">💍 Sealed for Tulsi</span>
+        </div>
+
+        <!-- Royal Interactive 3D Envelope Wrapper -->
+        <div class="royal-envelope-stage" id="royalEnvelopeStage">
+          
+          <!-- Closed Envelope with Wax Seal -->
+          <div class="envelope-sealed-view" id="envelopeSealedView">
+            <div class="envelope-pocket">
+              <div class="envelope-top-flap"></div>
+              <div class="wax-seal-button" id="waxSealButton" title="Tap seal to open Kanu's letter!">
+                <span class="wax-ring-icon">💍</span>
+              </div>
+            </div>
+            <h3 class="envelope-hint-title">A Sealed Royal Letter From Kanu</h3>
+            <div class="envelope-hint-sub">For My Sweetest Tulsi (Tuli) 🌸</div>
+            <p class="envelope-hint-cta">✨ Tap the Wax Seal to Open &amp; Unfold ✨</p>
+          </div>
+
+          <!-- Unfolded Letter Parchment -->
+          <div class="envelope-unfolded-view" id="envelopeUnfoldedView">
+            <div class="letter-parchment-sheet">
+              <div class="parchment-stamp">💍</div>
+
+              <h2 class="parchment-salutation">My Dearest Tuli (My Future Wife), 🌸</h2>
+
+              <div class="parchment-body">
+                <p>
+                  Today, on your <strong>24th birthday</strong>, my heart overflows with gratitude. From the quiet smiles we share to the late-night talks that make hours feel like minutes—loving you is the sweetest blessing of my life.
+                </p>
+                <p>
+                  Calling you my <strong>fiancée</strong> and soon my wife is my greatest joy. I promise to protect your smile, cherish your heart, and walk beside you through every sunrise of this life.
+                </p>
+                <p>
+                  May this 24th year bring you boundless happiness, peace, and every bit of magic your beautiful soul deserves.
+                </p>
+              </div>
+
+              <div class="parchment-sign-off">Forever &amp; unconditionally yours,</div>
+              <div class="parchment-signature">Your Kanu ❤️ (Yogi)</div>
+
+              <!-- Interactive Actions inside Letter -->
+              <div class="letter-actions-dock">
+                <button class="btn-royal-kisses" id="sendKissesBtn">
+                  <span>Send Love &amp; Kisses to Kanu</span>
+                  <span>💋💖</span>
+                </button>
+                <div class="kisses-tally" id="kissesTally">Tap to send sweet kisses to Kanu!</div>
+              </div>
+
+              <div style="margin-top: 18px; text-align: center;">
+                <button class="btn-reseal-ghost" id="resealEnvelopeBtn">
+                  <span>💌 Close &amp; Re-seal in Envelope</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Sleek Footer Tribute -->
+            <footer class="letter-footer-quote">
+              <div class="quote-cursive">"In a sea of people, my eyes will always search for you."</div>
+              <p class="quote-author">Crafted with unconditional love by <strong>Kanu (Yogi)</strong> for his precious fiancée <strong>Tuli (Tulsi)</strong> 💍❤️</p>
+            </footer>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================
+       FLOATING NAVIGATION DOCK (CENTERED, NON-OVERLAPPING)
+       =================================================================== -->
+  <nav class="luxury-nav-dock" id="luxuryNavDock" aria-label="Slide navigation">
+    <button class="nav-dock-arrow" id="navPrevBtn" aria-label="Previous chapter">&#10094;</button>
+    <div class="nav-dock-center">
+      <span class="nav-dock-chapter-pill" id="navChapterPill">Chapter 01 &bull; Royal Entrance</span>
+      <div class="nav-dock-dots" id="navDockDots">
+        <span class="dock-dot active" data-index="0" title="Chapter 1"></span>
+        <span class="dock-dot" data-index="1" title="Chapter 2"></span>
+        <span class="dock-dot" data-index="2" title="Chapter 3"></span>
+        <span class="dock-dot" data-index="3" title="Chapter 4"></span>
+        <span class="dock-dot" data-index="4" title="Chapter 5"></span>
+        <span class="dock-dot" data-index="5" title="Chapter 6"></span>
+        <span class="dock-dot" data-index="6" title="Chapter 7"></span>
+      </div>
+    </div>
+    <button class="plushie-dock-cuddle-btn" id="plushieCuddleBtn" title="Make Kanu Bear &amp; Tuli Bunny cuddle!">
+      <span>🧸 Hug 🐰</span>
+    </button>
+    <button class="nav-dock-arrow" id="navNextBtn" aria-label="Next chapter">&#10095;</button>
+  </nav>
+
+  <!-- ===================================================================
+       ADORABLE ANIMATED PLUSHIES: KANU BEAR 🧸 & TULI BUNNY 🐰
+       (Cleanly placed in bottom-left and bottom-right corners - zero dock overlap)
+       =================================================================== -->
+  <aside class="plushies-dock" id="plushiesDock" aria-label="Teddy plushie companions">
+    
+    <!-- Kanu Bear (Left Corner) -->
+    <div class="plushie-corner left-corner" id="plushieKanu" title="Tap Kanu Bear for love hugs! 🧸">
+      <div class="plushie-speech-box" id="kanuSpeech">Bov Badhu love you bacchudi! 🧸❤️</div>
+      <div class="plushie-svg-container">
+        <svg viewBox="0 0 100 100" class="plushie-svg">
+          <defs>
+            <radialGradient id="bearSkin" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="#E5AF78"/>
+              <stop offset="70%" stop-color="#C58548"/>
+              <stop offset="100%" stop-color="#995D28"/>
+            </radialGradient>
+            <radialGradient id="bearMuzzle" cx="50%" cy="40%" r="50%">
+              <stop offset="0%" stop-color="#FFF3E0"/>
+              <stop offset="100%" stop-color="#F5D6B4"/>
+            </radialGradient>
+            <radialGradient id="bearHeart" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#FF7B89"/>
+              <stop offset="100%" stop-color="#D92E4E"/>
+            </radialGradient>
+          </defs>
+          <circle cx="28" cy="24" r="14" fill="url(#bearSkin)"/>
+          <circle cx="28" cy="24" r="8" fill="#FFCAD4"/>
+          <circle cx="72" cy="24" r="14" fill="url(#bearSkin)"/>
+          <circle cx="72" cy="24" r="8" fill="#FFCAD4"/>
+          <ellipse cx="50" cy="74" rx="28" ry="24" fill="url(#bearSkin)"/>
+          <ellipse cx="50" cy="74" rx="18" ry="16" fill="#FCE8D5"/>
+          <circle cx="50" cy="45" r="28" fill="url(#bearSkin)"/>
+          <ellipse cx="32" cy="52" rx="5" ry="3" fill="#FF7B89" opacity="0.6"/>
+          <ellipse cx="68" cy="52" rx="5" ry="3" fill="#FF7B89" opacity="0.6"/>
+          <ellipse cx="50" cy="54" rx="14" ry="10" fill="url(#bearMuzzle)"/>
+          <polygon points="50,48 45,53 55,53" fill="#4A2E18"/>
+          <path d="M47,54 Q50,58 53,54" stroke="#4A2E18" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="38" cy="42" r="4" fill="#2B180A"/>
+          <circle cx="36.5" cy="40.5" r="1.5" fill="#FFF"/>
+          <circle cx="62" cy="42" r="4" fill="#2B180A"/>
+          <circle cx="60.5" cy="40.5" r="1.5" fill="#FFF"/>
+          <!-- Bowtie -->
+          <polygon points="43,65 50,67 43,69" fill="#E63946"/>
+          <polygon points="57,65 50,67 57,69" fill="#E63946"/>
+          <circle cx="50" cy="67" r="3" fill="#B81D2E"/>
+          <!-- Paws Holding Heart -->
+          <circle cx="34" cy="75" r="7" fill="url(#bearSkin)"/>
+          <circle cx="66" cy="75" r="7" fill="url(#bearSkin)"/>
+          <path d="M50,70 C47,66 42,66 42,70 C42,74 50,78 50,78 C50,78 58,74 58,70 C58,66 53,66 50,70 Z" fill="url(#bearHeart)"/>
+        </svg>
+      </div>
+      <div class="plushie-tag">🧸 Kanu Bear</div>
+    </div>
+
+    <!-- Tuli Bunny (Right Corner) -->
+    <div class="plushie-corner right-corner" id="plushieTuli" title="Tap Tuli Bunny for flower giggles! 🐰">
+      <div class="plushie-speech-box" id="tuliSpeech">My sweetest Kanu! 🐰🌸</div>
+      <div class="plushie-svg-container">
+        <svg viewBox="0 0 100 100" class="plushie-svg">
+          <defs>
+            <radialGradient id="bunnySkin" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="#FFF6F8"/>
+              <stop offset="80%" stop-color="#FFE4EB"/>
+              <stop offset="100%" stop-color="#F7C5D2"/>
+            </radialGradient>
+            <radialGradient id="bunnyEar" cx="50%" cy="30%" r="60%">
+              <stop offset="0%" stop-color="#FFCAD4"/>
+              <stop offset="100%" stop-color="#F28B9F"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="36" cy="18" rx="8" ry="20" fill="url(#bunnySkin)" transform="rotate(-10 36 18)"/>
+          <ellipse cx="36" cy="18" rx="4.5" ry="14" fill="url(#bunnyEar)" transform="rotate(-10 36 18)"/>
+          <ellipse cx="64" cy="18" rx="8" ry="20" fill="url(#bunnySkin)" transform="rotate(10 64 18)"/>
+          <ellipse cx="64" cy="18" rx="4.5" ry="14" fill="url(#bunnyEar)" transform="rotate(10 64 18)"/>
+          <!-- Daisy Flower Crown -->
+          <circle cx="50" cy="27" r="4" fill="#FFD166"/>
+          <circle cx="45" cy="26" r="3" fill="#FFF"/>
+          <circle cx="55" cy="26" r="3" fill="#FFF"/>
+          <circle cx="48" cy="23" r="3" fill="#FFF"/>
+          <circle cx="52" cy="23" r="3" fill="#FFF"/>
+          <ellipse cx="50" cy="75" rx="26" ry="22" fill="url(#bunnySkin)"/>
+          <ellipse cx="50" cy="76" rx="16" ry="14" fill="#FFFFFF"/>
+          <circle cx="50" cy="46" r="26" fill="url(#bunnySkin)"/>
+          <ellipse cx="33" cy="53" rx="6" ry="3.5" fill="#FF7B89" opacity="0.65"/>
+          <ellipse cx="67" cy="53" rx="6" ry="3.5" fill="#FF7B89" opacity="0.65"/>
+          <polygon points="50,50 47,53 53,53" fill="#FF7B89"/>
+          <path d="M47,54 Q50,57 53,54" stroke="#D92E4E" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <circle cx="39" cy="44" r="3.8" fill="#3D1C28"/>
+          <circle cx="38" cy="42.5" r="1.4" fill="#FFF"/>
+          <circle cx="61" cy="44" r="3.8" fill="#3D1C28"/>
+          <circle cx="60" cy="42.5" r="1.4" fill="#FFF"/>
+          <!-- Paws Holding Flower -->
+          <circle cx="36" cy="73" r="6" fill="url(#bunnySkin)"/>
+          <circle cx="64" cy="73" r="6" fill="url(#bunnySkin)"/>
+          <circle cx="50" cy="71" r="5" fill="#FF7B89"/>
+          <circle cx="50" cy="71" r="2.5" fill="#FFE494"/>
+        </svg>
+      </div>
+      <div class="plushie-tag">🐰 Tuli Bunny</div>
+    </div>
+
+  </aside>
+
+  <!-- ===================================================================
+       TOAST BANNER: 24 ROSES GIFT NOTIFICATION
+       =================================================================== -->
+  <div class="rose-toast-pill" id="roseToastPill">
+    🌹 24 Royal Roses Gifted to My Sweet Tulsi! 💐✨
+  </div>
+
+  <!-- ===================================================================
+       MODAL: BALLOON SECRET LOVE NOTE MODAL
+       =================================================================== -->
+  <div class="luxury-modal" id="balloonNoteModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="balloonModalCloseBtn" aria-label="Close">&times;</button>
+      <div class="modal-stamp-icon">💌</div>
+      <span class="modal-pre-title">Secret Message From Kanu</span>
+      <h3 class="modal-message-quote" id="balloonModalQuote">"Bov Badhu love you bacchudi ❤️"</h3>
+      <div class="modal-sign">— Forever &amp; Always, Your Kanu 💍</div>
+      <div style="margin-top: 18px;">
+        <button class="btn-primary-glow" id="balloonModalCollectBtn">
+          <span>Keep in My Heart 💕</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       MODAL: ALL 6 NOTES UNLOCKED CELEBRATION
+       =================================================================== -->
+  <div class="luxury-modal" id="grandUnlockModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card grand-unlock-card">
+      <button class="modal-close-btn" id="grandUnlockCloseBtn" aria-label="Close">&times;</button>
+      <div class="grand-trophy-icon">👑💍💖</div>
+      <h2 class="grand-celebration-title">🎉 ALL 6 LOVE NOTES UNLOCKED! 🎉</h2>
+      <p class="grand-celebration-lead">
+        Tuli, every single balloon carries a piece of Kanu's soul. You are my greatest blessing, my fiancée, and my forever queen!
+      </p>
+      <div class="unlocked-notes-list" id="unlockedNotesList"></div>
+      <div style="margin-top: 20px;">
+        <button class="btn-royal-rose" id="respawnBalloonsBtn">
+          <span>🎈 Release Fresh Balloons to Pop Again!</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       MODAL: FULLSCREEN CINEMATIC LIGHTBOX
+       =================================================================== -->
+  <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="lightbox-stage">
+      <button class="lightbox-close" id="lightboxCloseBtn" aria-label="Close">&times;</button>
+      <button class="lightbox-arrow prev" id="lightboxPrevBtn" aria-label="Previous">&#10094;</button>
+      <button class="lightbox-arrow next" id="lightboxNextBtn" aria-label="Next">&#10095;</button>
+      <div class="lightbox-counter" id="lightboxCounter">Photo 1 of 39</div>
+      <div class="lightbox-frame">
+        <img src="" alt="Enlarged memory" id="lightboxFrameImg" />
+      </div>
+      <div class="lightbox-caption-dock">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+        <button class="lightbox-love-action-btn" id="lightboxHeartBtn" title="Send love to this memory">💖 Love Memory</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech Engine Stack -->
+  <script src="lib/three.min.js"></script>
+  <script src="lib/gsap.min.js"></script>
+  <script src="three-world.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
