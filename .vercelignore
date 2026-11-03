@@ -1,0 +1,6 @@
+legacy_archive/
+raw_originals/
+backup/
+.git/
+.system_generated/
+*.log
