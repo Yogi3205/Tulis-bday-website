@@ -476,7 +476,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gentle audio tick
     audioSystem.playTick();
+
+    // Reset auto-flow timer for the new active slide
+    resetAutoAdvanceTimer();
   }
+
+  // Auto-flow Story Progression Engine
+  let autoAdvanceTimer = null;
+  function resetAutoAdvanceTimer() {
+    if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
+    
+    // Generous per-slide dwell times so user is never rushed
+    let dwellTime = 0;
+    if (activeSlide === 0) dwellTime = 12000;
+    else if (activeSlide === 1) dwellTime = 0; // Handled by cinema reel ticker
+    else if (activeSlide === 2) dwellTime = 10000;
+    else if (activeSlide === 3) dwellTime = 0; // Gallery: calm manual scroll
+    else if (activeSlide === 4) dwellTime = 22000;
+    else if (activeSlide === 5) dwellTime = 0; // Handled when candles blown out
+    else if (activeSlide === 6) dwellTime = 0; // Final letter stays
+
+    if (dwellTime > 0) {
+      autoAdvanceTimer = setTimeout(() => {
+        if (!document.querySelector('.luxury-modal.show, .lightbox-overlay.show')) {
+          goToSlide(activeSlide + 1);
+        }
+      }, dwellTime);
+    }
+  }
+
+  window.addEventListener('touchstart', resetAutoAdvanceTimer, { passive: true });
+  window.addEventListener('scroll', resetAutoAdvanceTimer, { passive: true });
 
   // Prev / Next Nav Buttons
   const navPrevBtn = document.getElementById('navPrevBtn');
@@ -544,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   // =================================================================
-  // INTELLIGENT MOBILE TOUCH GESTURES (SWIPE & FLUID SCROLL)
+  // INTELLIGENT MOBILE TOUCH GESTURES (SWIPE & FLUID SCROLL IN ANY DIRECTION)
   // =================================================================
   let touchStartX = 0;
   let touchStartY = 0;
@@ -557,9 +587,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   window.addEventListener('touchend', (e) => {
-    // In Chapter 04 (photo gallery) or inside lightbox/cards, never swipe-jump slides
-    // User can freely scroll and view every single memory with peace of mind!
-    if (activeSlide === 3 || e.target.closest('#polaroidDeckGrid, .polaroid-card, .gallery-card, .lightbox-overlay, .gallery-filter-tabs')) {
+    // If inside a modal or lightbox, don't change slides
+    if (e.target.closest('.luxury-modal.show, .lightbox-overlay.show, .modal-card, .grand-unlock-card')) {
       return;
     }
 
@@ -569,17 +598,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const diffY = touchStartY - touchEndY;
     const timeElapsed = Date.now() - touchStartTime;
 
-    // Ignore slow drags or taps longer than 550ms
-    if (timeElapsed > 550) return;
+    // Ignore slow drags or long presses (> 700ms)
+    if (timeElapsed > 700) return;
 
-    // Horizontal Swipe (Swipe Left = Next Chapter, Swipe Right = Prev Chapter)
-    // High horizontal threshold so vertical scrolling never triggers accidental page turns
-    if (Math.abs(diffX) > 75 && Math.abs(diffX) > Math.abs(diffY) * 2.2) {
+    // Special handling for Slide 4 (Chapter 04: Photo Gallery)
+    if (activeSlide === 3) {
+      const grid = document.getElementById('polaroidDeckGrid');
+      // Horizontal swipe on gallery advances/goes back
+      if (Math.abs(diffX) > 55 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+        if (diffX > 0) goToSlide(4);
+        else goToSlide(2);
+        return;
+      }
+      // If at bottom of grid and swiping up, advance to Slide 5
+      if (grid && diffY > 45) {
+        const atBottom = grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 35;
+        if (atBottom) {
+          goToSlide(4);
+          return;
+        }
+      }
+      // If at top of grid and swiping down, go back to Slide 3
+      if (grid && diffY < -45) {
+        const atTop = grid.scrollTop <= 15;
+        if (atTop) {
+          goToSlide(2);
+          return;
+        }
+      }
+      return;
+    }
+
+    // Special handling for Slide 5 (Reason flip card swipe left/right)
+    if (activeSlide === 4 && e.target.closest('#reasonFlipCard, .reason-card-container')) {
+      if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0) {
+          renderReason((currentReasonIdx + 1) % reasonsData.length);
+        } else {
+          renderReason((currentReasonIdx - 1 + reasonsData.length) % reasonsData.length);
+        }
+        return;
+      }
+    }
+
+    // Universal natural swipe in ANY direction:
+    // Swipe Left or Swipe Up = Next Slide
+    // Swipe Right or Swipe Down = Prev Slide
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.1) {
       if (diffX > 0) {
         goToSlide(activeSlide + 1);
       } else {
         goToSlide(activeSlide - 1);
       }
+      return;
+    }
+
+    if (Math.abs(diffY) > 40 && Math.abs(diffY) > Math.abs(diffX) * 1.1) {
+      if (diffY > 0) {
+        goToSlide(activeSlide + 1);
+      } else {
+        goToSlide(activeSlide - 1);
+      }
+      return;
     }
   }, { passive: true });
 
@@ -728,51 +808,51 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =================================================================
-  // 3B. SLIDE 1: ROYAL ARCH PORTRAIT SWITCHER
+  // 3B. SLIDE 1: ROYAL ARCH PORTRAIT SWITCHER (TAP OR AUTO-CYCLE)
   // =================================================================
   const heroArchImg = document.getElementById('heroArchImg');
   const archPlaqueTitle = document.getElementById('archPlaqueTitle');
   const archPlaqueSub = document.getElementById('archPlaqueSub');
-  const heroPtabs = document.querySelectorAll('.hero-ptab');
   const heroArchFrame = document.getElementById('heroArchFrame');
 
-  if (heroArchImg && heroPtabs.length > 0) {
-    heroPtabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        e.stopPropagation();
-        heroPtabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
+  const heroPortraits = [
+    { src: 'images/Engagment (2).jpeg', title: 'Two Souls, One Ring', sub: 'Kanu & Tuli • Sacred Vow' },
+    { src: 'images/Engagment.jpeg', title: 'The Moment She Said YES', sub: 'Sacred Vow • Engagement' },
+    { src: 'images/_RRF6428-web.jpg', title: 'Queen of My Universe', sub: 'Tulsi • Birthday Girl' }
+  ];
+  let heroPortraitIdx = 0;
 
-        const nextSrc = tab.dataset.src;
-        const nextTitle = tab.dataset.title;
-        const nextSub = tab.dataset.sub;
+  function cycleHeroPortrait(idx) {
+    if (!heroArchImg) return;
+    heroPortraitIdx = (idx !== undefined) ? idx : (heroPortraitIdx + 1) % heroPortraits.length;
+    const item = heroPortraits[heroPortraitIdx];
 
-        // Smooth cross-fade transition
-        heroArchImg.style.opacity = '0';
-        heroArchImg.style.transform = 'scale(0.96)';
+    heroArchImg.style.opacity = '0';
+    heroArchImg.style.transform = 'scale(0.96)';
 
-        setTimeout(() => {
-          heroArchImg.src = nextSrc;
-          if (archPlaqueTitle) archPlaqueTitle.textContent = nextTitle;
-          if (archPlaqueSub) archPlaqueSub.textContent = nextSub;
-          heroArchImg.style.opacity = '1';
-          heroArchImg.style.transform = 'scale(1)';
-        }, 220);
+    setTimeout(() => {
+      heroArchImg.src = item.src;
+      if (archPlaqueTitle) archPlaqueTitle.textContent = item.title;
+      if (archPlaqueSub) archPlaqueSub.textContent = item.sub;
+      heroArchImg.style.opacity = '1';
+      heroArchImg.style.transform = 'scale(1)';
+    }, 200);
 
-        audioSystem.playChime();
-      });
-    });
-
-    // Tap on the frame cycles to the next portrait
-    if (heroArchFrame) {
-      heroArchFrame.addEventListener('click', () => {
-        const tabsArr = Array.from(heroPtabs);
-        const activeIdx = tabsArr.findIndex(t => t.classList.contains('active'));
-        const nextIdx = (activeIdx + 1) % tabsArr.length;
-        tabsArr[nextIdx].click();
-      });
-    }
+    audioSystem.playChime();
   }
+
+  if (heroArchFrame) {
+    heroArchFrame.addEventListener('click', () => {
+      cycleHeroPortrait();
+    });
+  }
+
+  // Auto-cycle hero portrait every 6 seconds on Slide 1
+  setInterval(() => {
+    if (activeSlide === 0) {
+      cycleHeroPortrait();
+    }
+  }, 6000);
 
   // =================================================================
   // 4. SLIDE 1: REAL-TIME CELEBRATION MILESTONE TIMER
@@ -905,8 +985,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   let reelIdx = 0;
-  let reelPaused = true; // Calm, patient manual navigation by default — user controls the pace!
-  const reelDuration = 6500;
+  let reelPaused = false; // Auto-play in single flow!
+  const reelDuration = 4200;
   let reelTimerStart = Date.now();
 
   const cinemaSegments = document.getElementById('cinemaSegments');
@@ -976,8 +1056,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (cinemaNextBtn) cinemaNextBtn.addEventListener('click', nextReel);
   if (cinemaPrevBtn) cinemaPrevBtn.addEventListener('click', prevReel);
+  const cinemaCenterZone = document.getElementById('cinemaCenterZone');
   if (cinemaNextZone) cinemaNextZone.addEventListener('click', nextReel);
   if (cinemaPrevZone) cinemaPrevZone.addEventListener('click', prevReel);
+  if (cinemaCenterZone) {
+    cinemaCenterZone.addEventListener('click', () => {
+      reelPaused = !reelPaused;
+      if (!reelPaused) reelTimerStart = Date.now();
+    });
+  }
 
   if (cinemaPlayBtn) {
     cinemaPlayBtn.textContent = '▶ Play';
@@ -996,7 +1083,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeFill) activeFill.style.width = `${progress}%`;
 
       if (elapsed >= reelDuration) {
-        nextReel();
+        if (reelIdx === reelSlides.length - 1) {
+          goToSlide(2); // Auto-flow to next chapter when film finishes!
+        } else {
+          nextReel();
+        }
       }
     }
     requestAnimationFrame(reelTicker);
@@ -1299,6 +1390,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: true });
   }
+  if (reasonCard) {
+    reasonCard.addEventListener('click', () => {
+      audioSystem.playTick();
+      renderReason((currentReasonIdx + 1) % reasonsData.length);
+    });
+  }
+
+  // Auto-cycle reasons every 4.8s on Slide 5
+  setInterval(() => {
+    if (activeSlide === 4) {
+      renderReason((currentReasonIdx + 1) % reasonsData.length);
+    }
+  }, 4800);
+
   renderReason(0);
 
   // =================================================================
@@ -1317,6 +1422,11 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => launchConfettiCannon(0.2, 0.4), 250);
       setTimeout(() => launchConfettiCannon(0.8, 0.4), 500);
       if (wishRevealBox) wishRevealBox.classList.add('show');
+      setTimeout(() => {
+        if (activeSlide === 5) {
+          goToSlide(6);
+        }
+      }, 5500);
     }
   }
 
