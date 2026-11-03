@@ -476,7 +476,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gentle audio tick
     audioSystem.playTick();
+
+    // Calm manual navigation - slide stays active until user swipes
   }
+
+  // Zero auto-advance: Slides stay indefinitely so user can read peacefully
 
   // Prev / Next Nav Buttons
   const navPrevBtn = document.getElementById('navPrevBtn');
@@ -543,8 +547,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
-  // =================================================================
-  // INTELLIGENT MOBILE TOUCH GESTURES (SWIPE & FLUID SCROLL)
+    // =================================================================
+  // INTELLIGENT MOBILE TOUCH GESTURES (SWIPE FOR SMOOTH PAGE TURNS)
   // =================================================================
   let touchStartX = 0;
   let touchStartY = 0;
@@ -557,9 +561,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   window.addEventListener('touchend', (e) => {
-    // In Chapter 04 (photo gallery) or inside lightbox/cards, never swipe-jump slides
-    // User can freely scroll and view every single memory with peace of mind!
-    if (activeSlide === 3 || e.target.closest('#polaroidDeckGrid, .polaroid-card, .gallery-card, .lightbox-overlay, .gallery-filter-tabs')) {
+    // If inside a modal or lightbox, don't change slides
+    if (e.target.closest('.luxury-modal.show, .lightbox-overlay.show, .modal-card, .grand-unlock-card')) {
       return;
     }
 
@@ -569,12 +572,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const diffY = touchStartY - touchEndY;
     const timeElapsed = Date.now() - touchStartTime;
 
-    // Ignore slow drags or taps longer than 550ms
-    if (timeElapsed > 550) return;
+    // Ignore slow drags or long presses (> 750ms)
+    if (timeElapsed > 750) return;
 
-    // Horizontal Swipe (Swipe Left = Next Chapter, Swipe Right = Prev Chapter)
-    // High horizontal threshold so vertical scrolling never triggers accidental page turns
-    if (Math.abs(diffX) > 75 && Math.abs(diffX) > Math.abs(diffY) * 2.2) {
+    // Special handling for Slide 5 (Reason flip card swipe left/right to view reasons)
+    if (activeSlide === 4 && e.target.closest('#reasonFlipCard, .reason-card-container')) {
+      if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0) {
+          renderReason((currentReasonIdx + 1) % reasonsData.length);
+        } else {
+          renderReason((currentReasonIdx - 1 + reasonsData.length) % reasonsData.length);
+        }
+        return;
+      }
+    }
+
+    // DELIBERATE HORIZONTAL SWIPE FOR SLIDE NAVIGATION:
+    // Swipe Left (diffX > 50) = Next Slide
+    // Swipe Right (diffX < -50) = Previous Slide
+    // Must be predominantly horizontal (|diffX| > |diffY| * 1.35)
+    // VERTICAL DRAGGING / SCROLLING NEVER CHANGES SLIDES!
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.35) {
       if (diffX > 0) {
         goToSlide(activeSlide + 1);
       } else {
@@ -728,51 +746,46 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =================================================================
-  // 3B. SLIDE 1: ROYAL ARCH PORTRAIT SWITCHER
+  // 3B. SLIDE 1: ROYAL ARCH PORTRAIT SWITCHER (TAP OR AUTO-CYCLE)
   // =================================================================
   const heroArchImg = document.getElementById('heroArchImg');
   const archPlaqueTitle = document.getElementById('archPlaqueTitle');
   const archPlaqueSub = document.getElementById('archPlaqueSub');
-  const heroPtabs = document.querySelectorAll('.hero-ptab');
   const heroArchFrame = document.getElementById('heroArchFrame');
 
-  if (heroArchImg && heroPtabs.length > 0) {
-    heroPtabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        e.stopPropagation();
-        heroPtabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
+  const heroPortraits = [
+    { src: 'images/Engagment (2).jpeg', title: 'Two Souls, One Ring', sub: 'Kanu & Tuli • Sacred Vow' },
+    { src: 'images/Engagment.jpeg', title: 'The Moment She Said YES', sub: 'Sacred Vow • Engagement' },
+    { src: 'images/_RRF6428-web.jpg', title: 'Queen of My Universe', sub: 'Tulsi • Birthday Girl' }
+  ];
+  let heroPortraitIdx = 0;
 
-        const nextSrc = tab.dataset.src;
-        const nextTitle = tab.dataset.title;
-        const nextSub = tab.dataset.sub;
+  function cycleHeroPortrait(idx) {
+    if (!heroArchImg) return;
+    heroPortraitIdx = (idx !== undefined) ? idx : (heroPortraitIdx + 1) % heroPortraits.length;
+    const item = heroPortraits[heroPortraitIdx];
 
-        // Smooth cross-fade transition
-        heroArchImg.style.opacity = '0';
-        heroArchImg.style.transform = 'scale(0.96)';
+    heroArchImg.style.opacity = '0';
+    heroArchImg.style.transform = 'scale(0.96)';
 
-        setTimeout(() => {
-          heroArchImg.src = nextSrc;
-          if (archPlaqueTitle) archPlaqueTitle.textContent = nextTitle;
-          if (archPlaqueSub) archPlaqueSub.textContent = nextSub;
-          heroArchImg.style.opacity = '1';
-          heroArchImg.style.transform = 'scale(1)';
-        }, 220);
+    setTimeout(() => {
+      heroArchImg.src = item.src;
+      if (archPlaqueTitle) archPlaqueTitle.textContent = item.title;
+      if (archPlaqueSub) archPlaqueSub.textContent = item.sub;
+      heroArchImg.style.opacity = '1';
+      heroArchImg.style.transform = 'scale(1)';
+    }, 200);
 
-        audioSystem.playChime();
-      });
-    });
-
-    // Tap on the frame cycles to the next portrait
-    if (heroArchFrame) {
-      heroArchFrame.addEventListener('click', () => {
-        const tabsArr = Array.from(heroPtabs);
-        const activeIdx = tabsArr.findIndex(t => t.classList.contains('active'));
-        const nextIdx = (activeIdx + 1) % tabsArr.length;
-        tabsArr[nextIdx].click();
-      });
-    }
+    audioSystem.playChime();
   }
+
+  if (heroArchFrame) {
+    heroArchFrame.addEventListener('click', () => {
+      cycleHeroPortrait();
+    });
+  }
+
+  // Hero portrait changed on tap only for calm viewing
 
   // =================================================================
   // 4. SLIDE 1: REAL-TIME CELEBRATION MILESTONE TIMER
@@ -905,8 +918,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   let reelIdx = 0;
-  let reelPaused = true; // Calm, patient manual navigation by default — user controls the pace!
-  const reelDuration = 6500;
+  let reelPaused = true; // Start paused for calm reading
+  const reelDuration = 4200;
   let reelTimerStart = Date.now();
 
   const cinemaSegments = document.getElementById('cinemaSegments');
@@ -976,8 +989,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (cinemaNextBtn) cinemaNextBtn.addEventListener('click', nextReel);
   if (cinemaPrevBtn) cinemaPrevBtn.addEventListener('click', prevReel);
+  const cinemaCenterZone = document.getElementById('cinemaCenterZone');
   if (cinemaNextZone) cinemaNextZone.addEventListener('click', nextReel);
   if (cinemaPrevZone) cinemaPrevZone.addEventListener('click', prevReel);
+  if (cinemaCenterZone) {
+    cinemaCenterZone.addEventListener('click', () => {
+      reelPaused = !reelPaused;
+      if (!reelPaused) reelTimerStart = Date.now();
+    });
+  }
 
   if (cinemaPlayBtn) {
     cinemaPlayBtn.textContent = '▶ Play';
@@ -996,7 +1016,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeFill) activeFill.style.width = `${progress}%`;
 
       if (elapsed >= reelDuration) {
-        nextReel();
+        if (reelIdx === reelSlides.length - 1) {
+          displayReel(0); // Loop back to first photo, never force slide change
+        } else {
+          nextReel();
+        }
       }
     }
     requestAnimationFrame(reelTicker);
@@ -1299,6 +1323,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: true });
   }
+  if (reasonCard) {
+    reasonCard.addEventListener('click', () => {
+      audioSystem.playTick();
+      renderReason((currentReasonIdx + 1) % reasonsData.length);
+    });
+  }
+
+  // Reasons cycled by user tapping card or dots at their own pace
+
   renderReason(0);
 
   // =================================================================
@@ -1317,6 +1350,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => launchConfettiCannon(0.2, 0.4), 250);
       setTimeout(() => launchConfettiCannon(0.8, 0.4), 500);
       if (wishRevealBox) wishRevealBox.classList.add('show');
+      // Wish reveal remains visible calmly until user swipes to Chapter 07
     }
   }
 

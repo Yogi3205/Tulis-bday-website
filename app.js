@@ -477,36 +477,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gentle audio tick
     audioSystem.playTick();
 
-    // Reset auto-flow timer for the new active slide
-    resetAutoAdvanceTimer();
+    // Calm manual navigation - slide stays active until user swipes
   }
 
-  // Auto-flow Story Progression Engine
-  let autoAdvanceTimer = null;
-  function resetAutoAdvanceTimer() {
-    if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
-    
-    // Generous per-slide dwell times so user is never rushed
-    let dwellTime = 0;
-    if (activeSlide === 0) dwellTime = 12000;
-    else if (activeSlide === 1) dwellTime = 0; // Handled by cinema reel ticker
-    else if (activeSlide === 2) dwellTime = 10000;
-    else if (activeSlide === 3) dwellTime = 0; // Gallery: calm manual scroll
-    else if (activeSlide === 4) dwellTime = 22000;
-    else if (activeSlide === 5) dwellTime = 0; // Handled when candles blown out
-    else if (activeSlide === 6) dwellTime = 0; // Final letter stays
-
-    if (dwellTime > 0) {
-      autoAdvanceTimer = setTimeout(() => {
-        if (!document.querySelector('.luxury-modal.show, .lightbox-overlay.show')) {
-          goToSlide(activeSlide + 1);
-        }
-      }, dwellTime);
-    }
-  }
-
-  window.addEventListener('touchstart', resetAutoAdvanceTimer, { passive: true });
-  window.addEventListener('scroll', resetAutoAdvanceTimer, { passive: true });
+  // Zero auto-advance: Slides stay indefinitely so user can read peacefully
 
   // Prev / Next Nav Buttons
   const navPrevBtn = document.getElementById('navPrevBtn');
@@ -573,8 +547,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
-  // =================================================================
-  // INTELLIGENT MOBILE TOUCH GESTURES (SWIPE & FLUID SCROLL IN ANY DIRECTION)
+    // =================================================================
+  // INTELLIGENT MOBILE TOUCH GESTURES (SWIPE FOR SMOOTH PAGE TURNS)
   // =================================================================
   let touchStartX = 0;
   let touchStartY = 0;
@@ -598,38 +572,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const diffY = touchStartY - touchEndY;
     const timeElapsed = Date.now() - touchStartTime;
 
-    // Ignore slow drags or long presses (> 700ms)
-    if (timeElapsed > 700) return;
+    // Ignore slow drags or long presses (> 750ms)
+    if (timeElapsed > 750) return;
 
-    // Special handling for Slide 4 (Chapter 04: Photo Gallery)
-    if (activeSlide === 3) {
-      const grid = document.getElementById('polaroidDeckGrid');
-      // Horizontal swipe on gallery advances/goes back
-      if (Math.abs(diffX) > 55 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
-        if (diffX > 0) goToSlide(4);
-        else goToSlide(2);
-        return;
-      }
-      // If at bottom of grid and swiping up, advance to Slide 5
-      if (grid && diffY > 45) {
-        const atBottom = grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 35;
-        if (atBottom) {
-          goToSlide(4);
-          return;
-        }
-      }
-      // If at top of grid and swiping down, go back to Slide 3
-      if (grid && diffY < -45) {
-        const atTop = grid.scrollTop <= 15;
-        if (atTop) {
-          goToSlide(2);
-          return;
-        }
-      }
-      return;
-    }
-
-    // Special handling for Slide 5 (Reason flip card swipe left/right)
+    // Special handling for Slide 5 (Reason flip card swipe left/right to view reasons)
     if (activeSlide === 4 && e.target.closest('#reasonFlipCard, .reason-card-container')) {
       if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
         if (diffX > 0) {
@@ -641,25 +587,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Universal natural swipe in ANY direction:
-    // Swipe Left or Swipe Up = Next Slide
-    // Swipe Right or Swipe Down = Prev Slide
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.1) {
+    // DELIBERATE HORIZONTAL SWIPE FOR SLIDE NAVIGATION:
+    // Swipe Left (diffX > 50) = Next Slide
+    // Swipe Right (diffX < -50) = Previous Slide
+    // Must be predominantly horizontal (|diffX| > |diffY| * 1.35)
+    // VERTICAL DRAGGING / SCROLLING NEVER CHANGES SLIDES!
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.35) {
       if (diffX > 0) {
         goToSlide(activeSlide + 1);
       } else {
         goToSlide(activeSlide - 1);
       }
-      return;
-    }
-
-    if (Math.abs(diffY) > 40 && Math.abs(diffY) > Math.abs(diffX) * 1.1) {
-      if (diffY > 0) {
-        goToSlide(activeSlide + 1);
-      } else {
-        goToSlide(activeSlide - 1);
-      }
-      return;
     }
   }, { passive: true });
 
@@ -847,12 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Auto-cycle hero portrait every 6 seconds on Slide 1
-  setInterval(() => {
-    if (activeSlide === 0) {
-      cycleHeroPortrait();
-    }
-  }, 6000);
+  // Hero portrait changed on tap only for calm viewing
 
   // =================================================================
   // 4. SLIDE 1: REAL-TIME CELEBRATION MILESTONE TIMER
@@ -985,7 +918,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   let reelIdx = 0;
-  let reelPaused = false; // Auto-play in single flow!
+  let reelPaused = true; // Start paused for calm reading
   const reelDuration = 4200;
   let reelTimerStart = Date.now();
 
@@ -1084,7 +1017,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (elapsed >= reelDuration) {
         if (reelIdx === reelSlides.length - 1) {
-          goToSlide(2); // Auto-flow to next chapter when film finishes!
+          displayReel(0); // Loop back to first photo, never force slide change
         } else {
           nextReel();
         }
@@ -1397,12 +1330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Auto-cycle reasons every 4.8s on Slide 5
-  setInterval(() => {
-    if (activeSlide === 4) {
-      renderReason((currentReasonIdx + 1) % reasonsData.length);
-    }
-  }, 4800);
+  // Reasons cycled by user tapping card or dots at their own pace
 
   renderReason(0);
 
@@ -1422,11 +1350,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => launchConfettiCannon(0.2, 0.4), 250);
       setTimeout(() => launchConfettiCannon(0.8, 0.4), 500);
       if (wishRevealBox) wishRevealBox.classList.add('show');
-      setTimeout(() => {
-        if (activeSlide === 5) {
-          goToSlide(6);
-        }
-      }, 5500);
+      // Wish reveal remains visible calmly until user swipes to Chapter 07
     }
   }
 

@@ -595,16 +595,16 @@ body::before {
   max-height: calc(100vh - 90px);
   overflow-y: auto;
   overflow-x: hidden;
-  background: var(--glass-bg);
-  border: var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   border-radius: var(--radius-xl);
-  padding: clamp(24px, 3.5vw, 38px);
+  padding: clamp(20px, 3vw, 36px);
   position: relative;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 209, 102, 0.35) transparent;
 }
@@ -2515,8 +2515,8 @@ body::before {
   50% { opacity: 0.95; transform: translateY(-3px); }
 }
 @keyframes bounceArrow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
 }
 
 .gallery-bottom-hint {
